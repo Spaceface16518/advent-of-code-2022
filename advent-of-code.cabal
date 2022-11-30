@@ -92,14 +92,8 @@ executable advent-of-code-exe
   build-depends:
       ansi-terminal
     , advent-of-code
-    , attoparsec
     , base >=4.7 && <5
     , containers
-    , directory
-    , mtl
     , optparse-applicative
     , parser-combinators
-    , text
-    , time
-    , vector
   default-language: GHC2021
