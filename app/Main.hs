@@ -1,48 +1,47 @@
 module Main where
 
-{- ORMOLU_DISABLE -}
 --- Day imports
-import qualified Days.Day01 as Day01 (runDay)
-import qualified Days.Day02 as Day02 (runDay)
-import qualified Days.Day03 as Day03 (runDay)
-import qualified Days.Day04 as Day04 (runDay)
-import qualified Days.Day05 as Day05 (runDay)
-import qualified Days.Day06 as Day06 (runDay)
-import qualified Days.Day07 as Day07 (runDay)
-import qualified Days.Day08 as Day08 (runDay)
-import qualified Days.Day09 as Day09 (runDay)
-import qualified Days.Day10 as Day10 (runDay)
-import qualified Days.Day11 as Day11 (runDay)
-import qualified Days.Day12 as Day12 (runDay)
-import qualified Days.Day13 as Day13 (runDay)
-import qualified Days.Day14 as Day14 (runDay)
-import qualified Days.Day15 as Day15 (runDay)
-import qualified Days.Day16 as Day16 (runDay)
-import qualified Days.Day17 as Day17 (runDay)
-import qualified Days.Day18 as Day18 (runDay)
-import qualified Days.Day19 as Day19 (runDay)
-import qualified Days.Day20 as Day20 (runDay)
-import qualified Days.Day21 as Day21 (runDay)
-import qualified Days.Day22 as Day22 (runDay)
-import qualified Days.Day23 as Day23 (runDay)
-import qualified Days.Day24 as Day24 (runDay)
-import qualified Days.Day25 as Day25 (runDay)
 
 --- Other imports
-import Data.Map (Map)
-import qualified Data.Map as Map
-import Data.Maybe (fromMaybe)
-import Options.Applicative
-import qualified Control.Applicative.Combinators as C (option)
-import Program.RunDay (Day, Verbosity (Quiet, Timings, Verbose))
-import Data.List (intercalate)
-import Control.Monad (unless, forM_)
 
+import Control.Applicative.Combinators qualified as C (option)
+import Control.Monad (forM_, unless)
+import Data.List (intercalate)
+import Data.Map (Map)
+import Data.Map qualified as Map
+import Data.Maybe (fromMaybe)
+import Days.Day01 qualified as Day01 (runDay)
+import Days.Day02 qualified as Day02 (runDay)
+import Days.Day03 qualified as Day03 (runDay)
+import Days.Day04 qualified as Day04 (runDay)
+import Days.Day05 qualified as Day05 (runDay)
+import Days.Day06 qualified as Day06 (runDay)
+import Days.Day07 qualified as Day07 (runDay)
+import Days.Day08 qualified as Day08 (runDay)
+import Days.Day09 qualified as Day09 (runDay)
+import Days.Day10 qualified as Day10 (runDay)
+import Days.Day11 qualified as Day11 (runDay)
+import Days.Day12 qualified as Day12 (runDay)
+import Days.Day13 qualified as Day13 (runDay)
+import Days.Day14 qualified as Day14 (runDay)
+import Days.Day15 qualified as Day15 (runDay)
+import Days.Day16 qualified as Day16 (runDay)
+import Days.Day17 qualified as Day17 (runDay)
+import Days.Day18 qualified as Day18 (runDay)
+import Days.Day19 qualified as Day19 (runDay)
+import Days.Day20 qualified as Day20 (runDay)
+import Days.Day21 qualified as Day21 (runDay)
+import Days.Day22 qualified as Day22 (runDay)
+import Days.Day23 qualified as Day23 (runDay)
+import Days.Day24 qualified as Day24 (runDay)
+import Days.Day25 qualified as Day25 (runDay)
+import Options.Applicative
 -- Data Output
+
+import Program.Color (withColor)
+import Program.RunDay (Day, Verbosity (Quiet, Timings, Verbose))
+import System.Console.ANSI (Color (..))
 import Text.Printf (printf)
-import Program.Color ( withColor )
-import System.Console.ANSI (Color(..))
-{- ORMOLU_ENABLE -}
 
 data Days
   = AllDays
@@ -59,13 +58,17 @@ dayParser = (OneDay <$> day <*> input) <|> allDays
   where
     day =
       option auto $
-        long "day" <> short 'd' <> metavar "DAY"
+        long "day"
+          <> short 'd'
+          <> metavar "DAY"
           <> help "Present the solutions for one day."
 
     input =
       optional $
         strOption $
-          long "input" <> short 'i' <> metavar "FILE"
+          long "input"
+            <> short 'i'
+            <> metavar "FILE"
             <> help "The file to read the selected day's input from."
 
     allDays =
@@ -85,7 +88,8 @@ optionsParser = Options <$> dayParser <*> verbosityParser
     verbosityParser =
       C.option Quiet $
         ( flag' Verbose $
-            long "verbose" <> short 'v'
+            long "verbose"
+              <> short 'v'
               <> help
                 ( unwords
                     [ "Whether to print out extra info, such as the",
@@ -96,7 +100,8 @@ optionsParser = Options <$> dayParser <*> verbosityParser
                 )
         )
           <|> ( flag' Timings $
-                  long "timings" <> short 't'
+                  long "timings"
+                    <> short 't'
                     <> help
                       ( unwords
                           ["Whether to enable timing of the solutions."]
