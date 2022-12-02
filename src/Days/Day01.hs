@@ -1,7 +1,8 @@
 module Days.Day01 (runDay) where
 
 import Data.Attoparsec.Text hiding (take)
-import Data.List
+import Data.Heap
+import Data.List hiding (take)
 import Data.Map.Strict (Map)
 import Data.Map.Strict qualified as Map
 import Data.Maybe
@@ -13,6 +14,7 @@ import Data.Void
 import Debug.Trace (trace)
 import Program.RunDay qualified as R (Day, runDay)
 import Util.Util qualified as U
+import Prelude hiding (take)
 
 runDay :: R.Day
 runDay = R.runDay inputParser partA partB
@@ -34,4 +36,6 @@ partA = foldr (max . sum) 0
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB = sum . take 3 . sortBy (flip compare) . map sum
+partB = sum . take 3 . buildHeap . map sum
+  where
+    buildHeap = fromList :: (Ord a) => [a] -> MaxHeap a
