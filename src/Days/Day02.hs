@@ -14,6 +14,7 @@ import qualified Util.Util as U
 import qualified Program.RunDay as R (runDay, Day)
 import Data.Attoparsec.Text
 import Data.Void
+import Control.Applicative
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
@@ -21,18 +22,50 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = line `sepBy` endOfLine
+  where
+    line = do
+      opp <- oppMove <$> letter
+      char ' '
+      my <- myMove <$> letter
+      return (opp, my)
+
+oppMove :: Char -> Move
+oppMove 'A' = Rock
+oppMove 'B' = Paper
+oppMove 'C' = Scissors
+
+myMove :: Char -> Move
+myMove 'X' = Rock
+myMove 'Y' = Paper
+myMove 'Z' = Scissors
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [(Move, Move)]
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
+
+data Move = Rock | Paper | Scissors deriving (Show, Eq)
 
 ------------ PART A ------------
+moveScore :: Move -> Int
+moveScore Rock = 1
+moveScore Paper = 2
+moveScore Scissors = 3
+
+outCome :: Move -> Move -> Int
+outCome Rock Scissors = 0
+outCome Paper Rock = 0
+outCome Scissors Paper = 0
+outCome a b = if a == b then 3 else 6
+
+totalScore :: (Move, Move) -> Int
+totalScore (opp, my) = moveScore my + outCome opp my
+
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA = sum . map totalScore
 
 ------------ PART B ------------
 partB :: Input -> OutputB
