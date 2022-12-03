@@ -45,10 +45,13 @@ halve xs = splitAt s xs
     s = length xs `div` 2
 
 partA :: Input -> OutputA
-partA = sum . map (sum . map priority . trace' . nub . uncurry intersect . halve)
-  where
-    trace' x = trace (show x) x
+partA = sum . map (sum . map priority . nub . uncurry intersect . halve)
 
 ------------ PART B ------------
+
+chunks :: Int -> [a] -> [[a]]
+chunks _ [] = []
+chunks n xs = take n xs : chunks n (drop n xs)
+
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB = sum . map (sum . map priority . nub . foldr1 intersect) . chunks 3
