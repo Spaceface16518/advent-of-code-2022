@@ -12,7 +12,7 @@ import qualified Data.Vector as Vec
 import qualified Util.Util as U
 
 import qualified Program.RunDay as R (runDay, Day)
-import Data.Attoparsec.Text
+import Data.Attoparsec.Text hiding (choice)
 import Data.Void
 import Control.Applicative
 {- ORMOLU_ENABLE -}
@@ -25,48 +25,57 @@ inputParser :: Parser Input
 inputParser = line `sepBy` endOfLine
   where
     line = do
-      opp <- oppMove <$> letter
+      opp <- letter
       char ' '
-      my <- myMove <$> letter
+      my <- letter
       return (opp, my)
 
-oppMove :: Char -> Move
-oppMove 'A' = Rock
-oppMove 'B' = Paper
-oppMove 'C' = Scissors
-
-myMove :: Char -> Move
-myMove 'X' = Rock
-myMove 'Y' = Paper
-myMove 'Z' = Scissors
-
 ------------ TYPES ------------
-type Input = [(Move, Move)]
+type Input = [(Char, Char)]
 
 type OutputA = Int
 
 type OutputB = Int
 
-data Move = Rock | Paper | Scissors deriving (Show, Eq)
-
 ------------ PART A ------------
-moveScore :: Move -> Int
-moveScore Rock = 1
-moveScore Paper = 2
-moveScore Scissors = 3
+score :: Char -> Int
+score 'A' = 1
+score 'B' = 2
+score 'C' = 3
 
-outCome :: Move -> Move -> Int
-outCome Rock Scissors = 0
-outCome Paper Rock = 0
-outCome Scissors Paper = 0
-outCome a b = if a == b then 3 else 6
+win :: Char -> Char
+win 'A' = 'B'
+win 'B' = 'C'
+win 'C' = 'A'
 
-totalScore :: (Move, Move) -> Int
-totalScore (opp, my) = moveScore my + outCome opp my
+outcome :: Char -> Char -> Int
+outcome opp my
+  | opp == my = 3
+  | opp == win my = 0
+  | otherwise = 6
+
+outcomeScore opp my = score my + outcome opp my
+
+translate 'X' = 'A'
+translate 'Y' = 'B'
+translate 'Z' = 'C'
 
 partA :: Input -> OutputA
-partA = sum . map totalScore
+partA = sum . map (\(opp, my) -> outcomeScore opp (translate my))
 
 ------------ PART B ------------
+
+lose :: Char -> Char
+lose 'A' = 'C'
+lose 'B' = 'A'
+lose 'C' = 'B'
+
+choice :: Char -> Char -> Char
+choice 'X' = lose
+choice 'Y' = id
+choice 'Z' = win
+
+outcomeScore' opp my = let my' = choice my opp in score my' + outcome opp my'
+
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB = sum . map (uncurry outcomeScore')
