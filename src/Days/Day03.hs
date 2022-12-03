@@ -12,8 +12,10 @@ import qualified Data.Vector as Vec
 import qualified Util.Util as U
 
 import qualified Program.RunDay as R (runDay, Day)
-import Data.Attoparsec.Text
+import Data.Attoparsec.Text hiding (take)
 import Data.Void
+import Data.Char
+import Debug.Trace
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
@@ -21,18 +23,31 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = many' (many' letter <* endOfLine)
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [[Char]]
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
+priority :: Char -> Int
+priority c
+  | 'a' <= c && c <= 'z' = ord c - ord 'a' + 1
+  | 'A' <= c && c <= 'Z' = ord c - ord 'A' + 27
+  | otherwise = error "invalid char"
+
+halve :: [a] -> ([a], [a])
+halve xs = splitAt s xs
+  where
+    s = length xs `div` 2
+
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA = sum . map (sum . map priority . trace' . nub . uncurry intersect . halve)
+  where
+    trace' x = trace (show x) x
 
 ------------ PART B ------------
 partB :: Input -> OutputB
