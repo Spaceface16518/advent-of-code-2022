@@ -73,6 +73,7 @@ library
     , text
     , time
     , vector
+    , split
   default-language: GHC2021
 
 executable advent-of-code-exe

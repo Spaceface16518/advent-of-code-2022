@@ -16,6 +16,7 @@ import Data.Attoparsec.Text hiding (take)
 import Data.Void
 import Data.Char
 import Debug.Trace
+import Data.List.Split (chunksOf)
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
@@ -49,9 +50,5 @@ partA = sum . map (sum . map priority . nub . uncurry intersect . halve)
 
 ------------ PART B ------------
 
-chunks :: Int -> [a] -> [[a]]
-chunks _ [] = []
-chunks n xs = take n xs : chunks n (drop n xs)
-
 partB :: Input -> OutputB
-partB = sum . map (sum . map priority . nub . foldr1 intersect) . chunks 3
+partB = sum . map (sum . map priority . nub . foldr1 intersect) . chunksOf 3
