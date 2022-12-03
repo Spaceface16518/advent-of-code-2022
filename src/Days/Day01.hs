@@ -19,7 +19,7 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = decimal `sepBy` char '\n' `sepBy` string "\n\n"
+inputParser = decimal `sepBy` "\n" `sepBy` "\n\n"
 
 ------------ TYPES ------------
 type Input = [[Int]]
