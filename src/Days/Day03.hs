@@ -36,9 +36,8 @@ type OutputB = Int
 ------------ PART A ------------
 priority :: Char -> Int
 priority c
-  | 'a' <= c && c <= 'z' = ord c - ord 'a' + 1
-  | 'A' <= c && c <= 'Z' = ord c - ord 'A' + 27
-  | otherwise = error "invalid char"
+  | isLower c = ord c - ord 'a' + 1
+  | isUpper c = ord c - ord 'A' + 27
 
 halve :: [a] -> ([a], [a])
 halve xs = splitAt s xs
