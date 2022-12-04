@@ -75,7 +75,7 @@ choice 'X' = lose
 choice 'Y' = id
 choice 'Z' = win
 
-outcomeScore' opp my = let my' = choice my opp in score my' + outcome opp my'
+outcomeScore' (opp, my) = let my' = choice my opp in score my' + outcome opp my'
 
 partB :: Input -> OutputB
-partB = sum . map (uncurry outcomeScore')
+partB = sum . map outcomeScore'
