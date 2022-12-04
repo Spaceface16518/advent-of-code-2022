@@ -58,7 +58,7 @@ partA = length . filter (ap ((||) . uncurry contains) (uncurry . flip $ contains
 ------------ PART B ------------
 
 overlaps :: Range -> Range -> Bool
-overlaps (l, r) (x, y) = l <= x && x <= r || l <= y && y <= r
+overlaps (l, r) (x, y) = l <= y && r >= x
 
 partB :: Input -> OutputB
 partB = length . filter (ap ((||) . uncurry overlaps) (uncurry . flip $ overlaps))
