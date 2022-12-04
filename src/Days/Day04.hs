@@ -52,8 +52,11 @@ type OutputB = Int
 contains :: Range -> Range -> Bool
 contains (l, r) (x, y) = l <= x && y <= r
 
+-- | util function to check f for both orders of ranges
+both f = ap ((||) . uncurry f) (uncurry . flip $ f)
+
 partA :: Input -> OutputA
-partA = length . filter (ap ((||) . uncurry contains) (uncurry . flip $ contains))
+partA = length . filter (both contains)
 
 ------------ PART B ------------
 
@@ -61,4 +64,4 @@ overlaps :: Range -> Range -> Bool
 overlaps (l, r) (x, y) = l <= y && r >= x
 
 partB :: Input -> OutputB
-partB = length . filter (ap ((||) . uncurry overlaps) (uncurry . flip $ overlaps))
+partB = length . filter (both overlaps)
