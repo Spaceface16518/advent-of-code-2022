@@ -15,8 +15,6 @@ import qualified Program.RunDay as R (runDay, Day)
 import Data.Attoparsec.Text
 import Data.Void
 import Control.Monad
-import Data.Set (fromList)
-import Data.Set (size)
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
