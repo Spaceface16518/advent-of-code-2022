@@ -22,18 +22,10 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = many' (pair <* endOfLine)
-  where
-    range = do
-      l <- decimal
-      char '-'
-      r <- decimal
-      return (l, r)
-    pair = do
-      l <- range
-      char ','
-      r <- range
-      return (l, r)
+inputParser =
+  let range = (,) <$> decimal <* char '-' <*> decimal
+      pair = (,) <$> range <* char ',' <*> range
+   in many' (pair <* endOfLine)
 
 ------------ TYPES ------------
 type Range = (Int, Int)
