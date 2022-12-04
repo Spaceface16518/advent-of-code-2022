@@ -15,6 +15,8 @@ import qualified Program.RunDay as R (runDay, Day)
 import Data.Attoparsec.Text
 import Data.Void
 import Control.Monad
+import Data.Set (fromList)
+import Data.Set (size)
 {- ORMOLU_ENABLE -}
 
 runDay :: R.Day
@@ -55,11 +57,8 @@ partA = length . filter (ap ((||) . uncurry contains) (uncurry . flip $ contains
 
 ------------ PART B ------------
 
-overlaps :: Pair -> Bool
-overlaps ((l, r), (x, y)) = l <= y && x <= r
-
-overlap :: Pair -> Int
-overlap ((l, r), (x, y)) = max 0 $ min r y - max l x
+overlaps :: Range -> Range -> Bool
+overlaps (l, r) (x, y) = l <= x && x <= r || l <= y && y <= r
 
 partB :: Input -> OutputB
-partB = sum . map overlap . filter overlaps
+partB = length . filter (ap ((||) . uncurry overlaps) (uncurry . flip $ overlaps))
